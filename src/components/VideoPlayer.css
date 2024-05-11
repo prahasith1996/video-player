@@ -1,0 +1,296 @@
+:focus-visible {
+    outline: none;
+}
+
+.video-player {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    background-color: black;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.video-element {
+    display: block;
+    width: 85vw;
+    height: 85vh;
+    /* padding-top: 20px; */
+}
+
+.video-overlay {
+    /* position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0; */
+    background: rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80vw;
+    z-index: 1001;
+}
+
+.video-controls {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+    width: 80vw;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: 1.5em;
+    height: 1.5em; */
+    position: absolute;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 3em;
+    cursor: pointer;
+    padding: 0 12px;
+}
+
+.play-pause-button {
+    font-size: 6em;
+    align-items: end;
+}
+
+.button-text {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: 0.3em;
+}
+
+.button-text.rewind {
+    left: 55%;
+    top: 47%;
+}
+
+.button-icon.rewind {
+    transform: scale(1.3);
+}
+
+.button-text.forward {
+    left: 44%;
+    top: 47%;
+}
+
+.button-icon.forward {
+    transform: scale(1.3);
+}
+
+.progress-container {
+    /* position: absolute;
+    bottom: 0; */
+    width: 80vw;
+    padding: 20px 10px 20px 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    z-index: 1002;
+}
+
+.progress-bar {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background: gray;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: red;
+    cursor: pointer;
+}
+
+.time-display {
+    color: white;
+    font-size: 18px;
+    padding: 0 12px;
+}
+
+.hotspot {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.dialog {
+    position: absolute;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.dialogImg {
+    position: absolute;
+    ;
+    z-index: 10;
+    transform: scale(0.9);
+}
+
+/* Adjust the positioning offsets as needed to not overlap with the hotspot */
+/* .video-player .dialog::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+} */
+
+/* .moving-arrows{
+    color: white;
+    position: absolute;
+    scale: 30;
+    top: 40%;
+} */
+
+.moving-arrows {
+    color: grey;
+    position: absolute;
+    transform: scale(30);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.forward-arrows {
+    top: 40%;
+    right: 30%;
+}
+
+.rewind-arrows {
+    top: 40%;
+    right: 70%;
+}
+
+.arrow {
+    animation-iteration-count: 1;
+    opacity: 0;
+}
+
+.forward-arrows .arrow {
+    animation: blinkFadeForward 0.5s ease-in-out forwards;
+}
+
+.rewind-arrows .arrow {
+    animation: blinkFadeRewind 0.5s ease-in-out backwards;
+}
+
+@keyframes blinkFadeForward {
+    0%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: translateX(5px);
+    }
+}
+
+@keyframes blinkFadeRewind {
+    0%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: translateX(-5px);
+    }
+}
+
+.icon-play-pause {
+    color: grey;
+    position: absolute;
+    transform: scale(30);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    top: 40%;
+    animation: fadeInGrow 0.2s ease-in-out forwards;
+}
+
+
+@keyframes fadeInGrow {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 0.1;
+        transform: scale(1);
+    }
+}
+
+/*
+.blink-glow {
+    animation: blinkAnimation 1.5s infinite, glowAnimation 1.5s infinite;
+}
+
+@keyframes blinkAnimation {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes glowAnimation {
+    0%, 100% {
+      text-shadow: 
+        0 0 5px #DAA520,
+        0 0 10px #DAA520,
+        0 0 15px #FF4500,
+        0 0 20px #FF4500;
+    }
+    50% {
+      text-shadow: 
+        0 0 10px #DAA520,
+        0 0 20px #DAA520,
+        0 0 30px #FF4500,
+        0 0 40px #FF4500;
+    }
+  }
+   */
+
+.pause-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}

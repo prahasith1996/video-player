@@ -1,0 +1,305 @@
+import React, { useRef, useState, useEffect } from 'react';
+import './VideoPlayer.css';
+
+function VideoPlayer() {
+    const videoRef = useRef(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [showControls, setShowControls] = useState(true);
+    // const [activeHotspots, setActiveHotspots] = useState(false);
+    const [hotspots, setHotspots] = useState([
+        // Example hotspot data structure
+        {
+            timestamp: 84, // seconds
+            position: { top: '39%', left: '21%' },
+            label: '1',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: 'orange'},
+            dialogText: 'simple',
+            imageUrl:'/images/sample1.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        {
+            timestamp: 170.20, // seconds
+            position: { top: '54%', left: '21%' },
+            label: '2',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: '#2c8175'},
+            dialogText: 'stratified',
+            imageUrl:'/images/sample2.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        {
+            timestamp: 265.50, // seconds
+            position: { top: '63%', left: '22%' },
+            label: '3',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: '#cb625e'},
+            dialogText: 'clustered',
+            imageUrl:'/images/sample3.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        {
+            timestamp: 362, // seconds
+            position: { top: '37%', left: '31%' },
+            label: '4',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: '#9b113f'},
+            dialogText: 'voluntary',
+            imageUrl:'/images/sample4.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        {
+            timestamp: 409, // seconds
+            position: { top: '43%', left: '31%' },
+            label: '5',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: '#9b113f'},
+            dialogText: 'convenience',
+            imageUrl:'/images/sample5.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        {
+            timestamp: 469, // seconds
+            position: { top: '23.5%', left: '47%' },
+            label: '6',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: 'orange'},
+            dialogText: 'wording',
+            imageUrl:'/images/sample6.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        {
+            timestamp: 507, // seconds
+            position: { top: '39%', left: '50%' },
+            label: '7',
+            size: { width: '30px', height: '30px' },
+            color: {color: 'white', backgroundColor: 'orange'},
+            dialogText: 'response ',
+            imageUrl:'/images/sample7.1.png',
+            dialogSize: { width: '150px'},
+            clicked: false,
+            active: false,
+            lastActiveTime:0
+        },
+        // ... more hotspots
+    ]);
+
+    useEffect(() => {
+        const updateTimeStamp = setInterval(() => {
+            if (!videoRef.current) return;
+
+            const currentTime = videoRef.current.currentTime;
+            const duration = videoRef.current.duration;
+
+            setCurrentTime(currentTime);
+            setProgress((currentTime / duration) * 100);
+
+            if (!isPlaying) return;
+
+            let isAnyHotspotActive = false
+
+            const updatedHotspots = hotspots.map(hotspot => {
+                // Check if the hotspot should be currently active
+                const toBeActive = Math.abs(hotspot.timestamp - currentTime) < 0.5 && Math.abs(hotspot.lastActiveTime - currentTime) > 0.5;
+                // Check if the video has been rewound past the hotspot's timestamp
+                const toReset = Math.abs(hotspot.lastActiveTime - currentTime) > 1;
+
+                if (toBeActive && !hotspot.active) {
+                    isAnyHotspotActive = true;
+                    return { ...hotspot, active: true, lastActiveTime: currentTime+0.5 };
+                }
+                else if (toReset) {
+                    return { ...hotspot, lastActiveTime: 0 };
+                }
+                else return hotspot
+            })
+
+            if (isAnyHotspotActive) {
+                videoRef.current.pause();
+                setIsPlaying(false);
+                setShowControls(false);
+                setHotspots(updatedHotspots);
+            }
+
+        }, 500);
+
+        return () => clearInterval(updateTimeStamp);
+    },[hotspots, isPlaying]);
+
+    useEffect(() => {
+        if (hotspots.every(hotspot => !hotspot.active || hotspot.clicked)) {
+            setShowControls(true);
+        }
+    }, [hotspots]);
+
+    const preloadImage = (src) => {
+        const img = new Image();
+        img.src = src;
+    };
+
+    // Preload images when the component mounts
+    useEffect(() => {
+        hotspots.forEach(hotspot => {
+            if (hotspot.imageUrl) {
+                preloadImage(hotspot.imageUrl);
+            }
+        });
+    });
+
+    const handlePlayPause = () => {
+        if (videoRef.current) {
+            const videoElement = videoRef.current;
+
+            if (isPlaying) {
+                videoElement.pause();
+                setIsPlaying(false);
+            } else {
+                // Check if the video is ready to play
+                if (videoElement.readyState >= 3) {
+                    videoElement.play()
+                        .then(() => {
+                            setIsPlaying(true);
+                            setHotspots(hotspots => hotspots.map(hotspot => ({
+                                ...hotspot,
+                                active: false,
+                                clicked: false
+                            })));
+                        })
+                        .catch(error => {
+                            // Handle the error for failed playback
+                            console.error("Error trying to play the video:", error);
+                        });
+                }
+            }
+        }
+    };
+
+    const handleRewind = () => {
+        if (videoRef.current) {
+            videoRef.current.currentTime -= 10; // Rewind 10 seconds
+        }
+    };
+
+    const handleFastForward = () => {
+        if (videoRef.current) {
+            videoRef.current.currentTime += 10; // Fast forward 10 seconds
+        }
+    };
+
+    const formatTime = (seconds) => {
+        const date = new Date(seconds * 1000);
+        const hh = date.getUTCHours();
+        const mm = date.getUTCMinutes().toString().padStart(2, '0');
+        const ss = date.getUTCSeconds().toString().padStart(2, '0');
+        if (hh) {
+            return `${hh}:${mm}:${ss}`;
+        }
+        return `${mm}:${ss}`;
+    };
+
+    const handleProgressChange = (e) => {
+        const newTime = videoRef.current.duration * (e.target.value / 100);
+        videoRef.current.currentTime = newTime;
+        setProgress(e.target.value);
+    };
+
+    const calculateProgressBackground = (value, max) => {
+        // Calculate percentage of progress
+        const percentage = (value / max) * 100;
+        // Return a background style with gradient effect
+        return `linear-gradient(to right, red ${percentage}%, lightgrey ${percentage}%, lightgrey 100%)`;
+    };
+
+    const handleHotspotClick = (index) => {
+        setHotspots(currentHotspots =>
+            currentHotspots.map((hotspot, i) => {
+                if (i === index) {
+                    return { ...hotspot, clicked: true };
+                }
+                return hotspot;
+            })
+        ); 
+    };
+
+    return (
+        <div className="video-player">
+            <video ref={videoRef} className="video-element">
+                <source src="/videos/sampling.mp4" type="video/webm" />
+                Your browser does not support the video tag.
+            </video>
+            {hotspots.map((hotspot, index) => hotspot?.active && (
+                <React.Fragment key={index}>
+                    <div
+                        className={`hotspot`}
+                        style={{ ...hotspot.position, ...hotspot.size, ...hotspot.color }}
+                        onClick={() => handleHotspotClick(index)}
+                    >
+                        {hotspot.label}
+                    </div>
+                    {hotspot.clicked && !hotspot.imageUrl && (
+                        <div
+                            className={`dialog`}
+                            style={{ ...hotspot.position, ...hotspot.dialogSize, left: `calc(${hotspot.position.left} + ${hotspot.size.width}+ 10px)`, }}
+                        >
+                            {hotspot.dialogText}
+                        </div>
+                    )}
+                    {hotspot.clicked && hotspot.imageUrl && (
+                        <img className={`dialogImg`} style={{ ...hotspot.position, left: `calc(${hotspot.position.left} + ${hotspot.size.width})`, }} src={hotspot.imageUrl} alt={`hotspot.dialogText`}/>
+                    )}
+                </React.Fragment>
+            ))}
+            {showControls && (
+            <div className="video-overlay">
+            <div className="progress-container">
+                <input
+                    type="range"
+                    className="progress-bar"
+                    min="0"
+                    max="100"
+                    value={progress}
+                    onChange={handleProgressChange}
+                    style={{ background: calculateProgressBackground(progress, 100) }}
+                />
+                <div className="time-display">{formatTime(currentTime)}</div>
+            </div>
+            <div className="video-controls">
+                <button onClick={handleRewind} className="control-button">
+                    <span className="button-icon">⟲</span>
+                    <span className="button-text rewind">10</span>
+                </button>
+                <button onClick={handlePlayPause} className="control-button">
+                    {isPlaying ? '❚❚' : '►'}
+                </button>
+                <button onClick={handleFastForward} className="control-button">
+                    <span className="button-icon">⟳</span>
+                    <span className="button-text forward">10</span>
+                </button>
+            </div>
+            </div>
+            )}
+        </div>
+    );
+}
+
+export default VideoPlayer;

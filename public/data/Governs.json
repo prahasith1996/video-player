@@ -1,0 +1,62 @@
+{
+    "static": [
+        {
+            "time": 146,
+            "location": {
+                "bottom": "0%",
+                "left": ""
+            }
+        },
+        {
+            "time": 273,
+            "location": {
+                "bottom": "0%",
+                "left": ""
+            }
+        },
+        {
+            "time": 358,
+            "location": {
+                "bottom": "0%",
+                "left": ""
+            }
+        },
+        {
+            "time": 488,
+            "location": {
+                "bottom": "0%",
+                "left": ""
+            }
+        }
+    ],
+    "dynamic": [
+        {
+            "time": 146,
+            "location": {
+                "top": "22%",
+                "left": "19%"
+            }
+        },
+        {
+            "time": 273,
+            "location": {
+                "top": "37%",
+                "left": "40%"
+            }
+        },
+        {
+            "time": 358,
+            "location": {
+                "top": "22%",
+                "left": "44%"
+            }
+        },
+        {
+            "time": 488,
+            "location": {
+                "top": "39%",
+                "left": "52%"
+            }
+        }
+    ]
+}
