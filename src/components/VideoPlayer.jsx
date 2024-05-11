@@ -9,21 +9,23 @@ function VideoPlayer() {
   const [lastPausedTimestamp, setLastPausedTimestamp] = useState(null);
   const [timestamps, setTimestamps] = useState([]);
   const searchParams = new URLSearchParams(window.location.search);
-  const videoID = searchParams.get("videoID");
+  const name = searchParams.get("name");
+  const type = searchParams.get("type");
+  const gaze = searchParams.get("gaze");
 
   useEffect(() => {
-    if (videoID) {
-      fetch(`/data/${videoID}.json`)
+    if (name) {
+      fetch(`/data/${name}.json`)
         .then((response) => response.json())
         .then((data) => {
-          const relevantData = data["dynamic"];
+          const relevantData = data[type];
           setTimestamps(relevantData);
         })
         .catch((error) =>
           console.error("Error loading the hotspot data:", error)
         );
     }
-  }, [videoID]);
+  }, [name]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -56,7 +58,7 @@ function VideoPlayer() {
       if (
         (event.key === "ArrowRight" || event.KeyCode === 39) &&
         !isPlaying &&
-        !showControls
+        !showControls && gaze === "true"
       ) {
         handlePlayPause();
       }
@@ -99,7 +101,7 @@ function VideoPlayer() {
     <div className="video-player">
       {!isPlaying && <div className="pause-overlay"></div>}
       <video ref={videoRef} className="video-element">
-        <source src={`/videos/${videoID}.webm`} type="video/webm" />
+        <source src={`/videos/${name}.webm`} type="video/webm" />
         Your browser does not support the video tag.
       </video>
       <div className="video-overlay">

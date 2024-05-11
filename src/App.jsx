@@ -16,6 +16,7 @@ function App() {
           <Route path="/anywhere" element={<AnywhereVideoPlayer />} />
           <Route path="/static" element={<StaticVideoPlayer />} />
           <Route path="/dynamic" element={<DynamicVideoPlayer />} />
+          <Route path="/video" element={<VideoPlayer />} />
           <Route path="*" element={<Navigate to="/regular" replace />} />
         </Routes>
       </Router>
