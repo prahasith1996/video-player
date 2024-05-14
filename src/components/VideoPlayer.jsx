@@ -120,21 +120,10 @@ function VideoPlayer() {
   };
 
   const handleVideoEnd = () => {
-    console.log("Video has ended. Simulating key press...");
-    simulateKeyPress('Escape');  // Simulate the Enter key press
-  };
-
-  const simulateKeyPress = (key) => {
-    const event = new KeyboardEvent('keydown', {
-      key: key,
-      code: key,
-      keyCode: key.charCodeAt(0),
-      which: key.charCodeAt(0),
-      shiftKey: false,
-      ctrlKey: false,
-      metaKey: false
+    const durations = pauseTimes.map((pauseTime, index) => {
+      return (playTimes[index] - pauseTime)/1000;
     });
-    document.dispatchEvent(event);
+    alert(durations);
   };
 
   const exportToCSV = (intervals) => {

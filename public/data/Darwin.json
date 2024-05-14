@@ -33,30 +33,31 @@
         {
             "time": 115,
             "location": {
-                "top": "22%",
-                "left": "19%"
+                "top": "41%",
+                "left": "61%"
             }
         },
         {
             "time": 266,
             "location": {
-                "top": "37%",
-                "left": "40%"
-            }
+                "top": "22%",
+                "left": "24%"
+            }                                                                                                                                                                                   
         },
         {
             "time": 397,
             "location": {
-                "top": "22%",
-                "left": "44%"
+                "top": "46%",
+                "left": "24%"
             }
         },
         {
             "time": 504,
             "location": {
-                "top": "39%",
-                "left": "52%"
+                "top": "22%",
+                "left": "24%"
             }
         }
-    ]
+    ],
+    "regular": []
 }

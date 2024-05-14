@@ -1,61 +1,31 @@
 {
-    "static": [
-        {
-            "time": 137,
-            "location": {
-                "bottom": "0%",
-                "left": ""
-            }
-        },
-        {
-            "time": 271,
-            "location": {
-                "bottom": "0%",
-                "left": ""
-            }
-        },
-        {
-            "time": 399,
-            "location": {
-                "bottom": "0%",
-                "left": ""
-            }
-        },
-        {
-            "time": 529,
-            "location": {
-                "bottom": "0%",
-                "left": ""
-            }
-        }
-    ],
     "dynamic": [
         {
-            "time": 137,
+            "time": 15,
             "location": {
-                "top": "42%",
-                "left": "37%"
+                "top": "38%",
+                "left": "67%"
             }
         },
         {
-            "time": 271,
+            "time": 30,
             "location": {
-                "top": "36%",
-                "left": "79%"
+                "bottom": "0%",
+                "left": ""
             }
         },
         {
-            "time": 399,
+            "time": 45,
             "location": {
-                "top": "58%",
-                "left": "48%"
+                "top": "54%",
+                "left": "46%"
             }
         },
         {
-            "time": 529,
+            "time": 60,
             "location": {
-                "top": "18%",
-                "left": "13%"
+                "bottom": "0%",
+                "left": ""
             }
         }
     ]

@@ -47,16 +47,17 @@
         {
             "time": 391,
             "location": {
-                "top": "18%",
-                "left": "81%"
+                "top": "13%",
+                "left": "42%"
             }
         },
         {
-            "time": 519,
+            "time": 525,
             "location": {
-                "top": "56%",
-                "left": "33%"
+                "top": "8%",
+                "left": "25%"
             }
         }
-    ]
+    ],
+    "regular": []
 }
