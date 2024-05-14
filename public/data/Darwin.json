@@ -1,28 +1,28 @@
 {
     "static": [
         {
-            "time": 117,
+            "time": 115,
             "location": {
                 "bottom": "0%",
                 "left": ""
             }
         },
         {
-            "time": 251,
+            "time": 266,
             "location": {
                 "bottom": "0%",
                 "left": ""
             }
         },
         {
-            "time": 391,
+            "time": 397,
             "location": {
                 "bottom": "0%",
                 "left": ""
             }
         },
         {
-            "time": 519,
+            "time": 504,
             "location": {
                 "bottom": "0%",
                 "left": ""
@@ -31,31 +31,31 @@
     ],
     "dynamic": [
         {
-            "time": 117,
+            "time": 115,
             "location": {
-                "top": "19%",
-                "left": "67%"
+                "top": "22%",
+                "left": "19%"
             }
         },
         {
-            "time": 251,
+            "time": 266,
             "location": {
-                "top": "13%",
-                "left": "28%"
+                "top": "37%",
+                "left": "40%"
             }
         },
         {
-            "time": 391,
+            "time": 397,
             "location": {
-                "top": "18%",
-                "left": "81%"
+                "top": "22%",
+                "left": "44%"
             }
         },
         {
-            "time": 519,
+            "time": 504,
             "location": {
-                "top": "56%",
-                "left": "33%"
+                "top": "39%",
+                "left": "52%"
             }
         }
     ]

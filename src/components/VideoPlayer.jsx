@@ -13,6 +13,9 @@ function VideoPlayer() {
   const type = searchParams.get("type");
   const gaze = searchParams.get("gaze");
 
+  const [pauseTimes, setPauseTimes] = useState([]);
+  const [playTimes, setPlayTimes] = useState([]);
+
   useEffect(() => {
     if (name) {
       fetch(`/data/${name}.json`)
@@ -45,6 +48,9 @@ function VideoPlayer() {
         setIsPlaying(false);
         setShowControls(false);
         setPlayButton({ ...matchingTimestamp.location });
+
+        setPauseTimes((prevTimes) => [...prevTimes, Date.now()]);
+
       }
     };
 
@@ -58,7 +64,8 @@ function VideoPlayer() {
       if (
         (event.key === "ArrowRight" || event.KeyCode === 39) &&
         !isPlaying &&
-        !showControls && gaze === "true"
+        !showControls &&
+        gaze === "true"
       ) {
         handlePlayPause();
       }
@@ -72,6 +79,16 @@ function VideoPlayer() {
       window.removeEventListener("keydown", handleKeyPress);
     };
   });
+
+  useEffect(() => {
+    if (playTimes.length === 4) {
+      // Calculate the durations and export to CSV when 3 pauses have occurred
+      const durations = pauseTimes.map((pauseTime, index) => {
+        return (playTimes[index] - pauseTime)/1000;
+      });
+      exportToCSV(durations);
+    }
+  }, [pauseTimes, playTimes]);
 
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -88,6 +105,11 @@ function VideoPlayer() {
               setPlayButton({ bottom: "0%", left: "" });
               setShowControls(true);
               setIsPlaying(true);
+
+              if (pauseTimes.length > 0) {
+                setPlayTimes((prevTimes) => [...prevTimes, Date.now()]);
+              }
+
             })
             .catch((error) => {
               console.error("Error trying to play the video:", error);
@@ -97,10 +119,47 @@ function VideoPlayer() {
     }
   };
 
+  const handleVideoEnd = () => {
+    console.log("Video has ended. Simulating key press...");
+    simulateKeyPress('Escape');  // Simulate the Enter key press
+  };
+
+  const simulateKeyPress = (key) => {
+    const event = new KeyboardEvent('keydown', {
+      key: key,
+      code: key,
+      keyCode: key.charCodeAt(0),
+      which: key.charCodeAt(0),
+      shiftKey: false,
+      ctrlKey: false,
+      metaKey: false
+    });
+    document.dispatchEvent(event);
+  };
+
+  const exportToCSV = (intervals) => {
+    const csvRows = [
+      ["Interaction Index", "Interaction duration (seconds)"],
+    ];
+    intervals.forEach((interval, index) => {
+      csvRows.push([index + 1, interval]);
+    });
+    const csvString = csvRows.map((e) => e.join(",")).join("\n");
+    const blob = new Blob([csvString], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("hidden", "");
+    a.setAttribute("href", url);
+    a.setAttribute("download", "interaction-durations.csv");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   return (
     <div className="video-player">
       {!isPlaying && <div className="pause-overlay"></div>}
-      <video ref={videoRef} className="video-element">
+      <video ref={videoRef} className="video-element" onEnded={handleVideoEnd}>
         <source src={`/videos/${name}.webm`} type="video/webm" />
         Your browser does not support the video tag.
       </video>
