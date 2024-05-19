@@ -298,3 +298,38 @@
 .hidden {
     visibility: hidden !important;
 }
+
+.alert-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+}
+
+.alert-box-hidden {
+    display: none;
+}
+
+
+table {
+    width: 30vw; /* Make the table use all available space in the container */
+    height: 25vh;
+    border-collapse: collapse; /* Ensures borders between cells are merged */
+}
+
+th, td {
+    text-align: center; /* Center-align text in headers and cells */
+    padding: 10px; /* Add some padding for aesthetic spacing */
+    font-size: 18px; /* Increase font size */
+    border: 1px solid #ccc; /* Add borders to cells */
+}
+
+th {
+    background-color: #f4f4f4; /* Light grey background for headers */
+    font-weight: bold; /* Make header font bold */
+}

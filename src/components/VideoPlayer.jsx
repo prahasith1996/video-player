@@ -12,9 +12,9 @@ function VideoPlayer() {
   const name = searchParams.get("name");
   const type = searchParams.get("type");
   const gaze = searchParams.get("gaze");
-
   const [pauseTimes, setPauseTimes] = useState([]);
   const [playTimes, setPlayTimes] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (name) {
@@ -48,9 +48,6 @@ function VideoPlayer() {
         setIsPlaying(false);
         setShowControls(false);
         setPlayButton({ ...matchingTimestamp.location });
-
-        setPauseTimes((prevTimes) => [...prevTimes, Date.now()]);
-
       }
     };
 
@@ -80,16 +77,6 @@ function VideoPlayer() {
     };
   });
 
-  useEffect(() => {
-    if (playTimes.length === 4) {
-      // Calculate the durations and export to CSV when 3 pauses have occurred
-      const durations = pauseTimes.map((pauseTime, index) => {
-        return (playTimes[index] - pauseTime)/1000;
-      });
-      exportToCSV(durations);
-    }
-  }, [pauseTimes, playTimes]);
-
   const handlePlayPause = () => {
     if (videoRef.current) {
       const videoElement = videoRef.current;
@@ -105,11 +92,9 @@ function VideoPlayer() {
               setPlayButton({ bottom: "0%", left: "" });
               setShowControls(true);
               setIsPlaying(true);
-
               if (pauseTimes.length > 0) {
                 setPlayTimes((prevTimes) => [...prevTimes, Date.now()]);
               }
-
             })
             .catch((error) => {
               console.error("Error trying to play the video:", error);
@@ -120,35 +105,24 @@ function VideoPlayer() {
   };
 
   const handleVideoEnd = () => {
-    const durations = pauseTimes.map((pauseTime, index) => {
-      return (playTimes[index] - pauseTime)/1000;
-    });
-    alert(durations);
+    setShowAlert(true);
   };
 
-  const exportToCSV = (intervals) => {
-    const csvRows = [
-      ["Interaction Index", "Interaction duration (seconds)"],
-    ];
-    intervals.forEach((interval, index) => {
-      csvRows.push([index + 1, interval]);
-    });
-    const csvString = csvRows.map((e) => e.join(",")).join("\n");
-    const blob = new Blob([csvString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.setAttribute("hidden", "");
-    a.setAttribute("href", url);
-    a.setAttribute("download", "interaction-durations.csv");
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handlePause = () => {
+    if (pauseTimes.length < 4) {
+      setPauseTimes((prevTimes) => [...prevTimes, Date.now()]);
+    }
   };
 
   return (
     <div className="video-player">
       {!isPlaying && <div className="pause-overlay"></div>}
-      <video ref={videoRef} className="video-element" onEnded={handleVideoEnd}>
+      <video
+        ref={videoRef}
+        className="video-element"
+        onEnded={handleVideoEnd}
+        onPause={handlePause}
+      >
         <source src={`/videos/${name}.webm`} type="video/webm" />
         Your browser does not support the video tag.
       </video>
@@ -162,6 +136,24 @@ function VideoPlayer() {
             {isPlaying ? "" : "▶"}
           </button>
         </div>
+      </div>
+      <div className={showAlert ? "alert-box" : "alert-box alert-box-hidden"}>
+        <table>
+          <thead>
+            <tr>
+              <th>Interaction</th>
+              <th>Interaction Duration (seconds)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pauseTimes.map((pauseTime, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{((playTimes[index] - pauseTime) / 1000).toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
