@@ -3,8 +3,8 @@
         {
             "time": 15,
             "location": {
-                "top": "38%",
-                "left": "67%"
+                "bottom": "0%",
+                "left": ""
             }
         },
         {
@@ -24,8 +24,36 @@
         {
             "time": 60,
             "location": {
+                "top": "40%",
+                "left": "34%"
+            }
+        },
+        {
+            "time": 75,
+            "location": {
                 "bottom": "0%",
                 "left": ""
+            }
+        },
+        {
+            "time": 90,
+            "location": {
+                "bottom": "0%",
+                "left": ""
+            }
+        },
+        {
+            "time": 105,
+            "location": {
+                "top": "77%",
+                "left": "34%"
+            }
+        },
+        {
+            "time": 120,
+            "location": {
+                "top": "20%",
+                "left": "41%"
             }
         }
     ]
